@@ -16,3 +16,7 @@ In you active theme directory, create a "attached_templates" directory. For each
  - mytemplate.tpl.php
 
 The file named *mytemplate.inc* must include a funcion named `mytemplate()`.
+
+### Examples
+
+Examples can be found in `attached_template_lite/templates` folder. Use thos as a starting point for your own templates.
