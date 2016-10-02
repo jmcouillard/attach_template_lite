@@ -1,0 +1,107 @@
+<?php
+
+require_once 'attach_template_lite.node.inc';
+
+/**
+ * Implementation of hook_menu().
+ */
+function attach_template_lite_menu() {
+
+  // Configuration page
+  $items['admin/config/content/attach_template'] = array(
+    'title' => 'Attach template configuration',
+    'description' => 'Configuration for Attach template module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('attach_template_lite_config_form'),
+    'access arguments' => array('access administration pages'),
+    'file' => 'attach_template_lite_config_form.inc',
+    'type' => MENU_NORMAL_ITEM
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_theme.
+ */
+function attach_template_lite_theme() {
+
+  $themes = array();
+  $list = _attach_template_lite_get_template_list();
+
+  foreach ($list as $template => $human_name) {
+
+    $template = explode("|", $template);
+    if ($template[1] == "theme") {
+      $theme_path = drupal_get_path('theme', variable_get('theme_default', NULL));
+      $template_location = "/" . $theme_path . '/attached_templates';
+    } else {
+      $module_path = drupal_get_path('module', 'attach_template_lite');
+      $template_location = "/" . $module_path . '/templates';
+    }
+
+    $themes['attach_template_lite_' . $template[0]] = array(
+      'template' => $template[0],
+      'path' => $template_location,
+      'variables' => array('data' => array()),
+    );
+  }
+
+  return $themes;
+}
+
+/**
+ * Implementation of hook_permission.
+ */
+function attach_template_lite_permission() {
+  return array(
+    'administer attached template' => array(
+      'title' => t('Administer attached template'),
+      'description' => t('If allowed, form will be added in the node edit/add form.'),
+    ),
+  );
+}
+
+/**
+ * Set page background rendered in banner. It will be passe to template.
+ */
+function _attach_template_lite_get_template_list() {
+
+  $templates = array();
+
+  // Get forms listing
+  $module_path = drupal_get_path("module", "attach_template_lite");
+  $module_forms = file_scan_directory($module_path . "/templates", '/.*\.inc$/');
+  foreach ($module_forms as $key => $file) {
+    $id = $file->name;
+    $templates[$id . "|module"] = str_replace("_", " ", $id);
+  }
+
+  $theme_path = drupal_get_path('theme', variable_get('theme_default', NULL));
+  $theme_forms = file_scan_directory($theme_path . "/attached_templates", '/.*\.inc$/');
+  foreach ($theme_forms as $key => $file) {
+    $id = $file->name;
+    $templates[$id . "|theme"] = str_replace("_", " ", $id);
+  }
+
+  return $templates;
+}
+
+/**
+ * Return the current edition language
+ */
+function _attach_template_lite_get_language($node) {
+  global $language;
+  $is_admin = path_is_admin(current_path());
+
+  // Entity translation related
+  if ($is_admin && module_exists("entity_translation")) {
+    $handler = entity_translation_get_handler('node', $node);
+    return $handler->getFormLanguage();
+  } else {
+    return (isset($node->translations) || (isset($node->translation) && $node->translation["status"])) ? $language->language : $node->language;
+  }
+
+}
+
+

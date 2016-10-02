@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * Implements hook_schema();
+ */
+function attach_template_lite_schema() {
+
+  $schema['attach_template_lite'] = array(
+    'description' => 'Report entry',
+    'fields' => array(
+      'nid' => array(
+        'description' => "The node id.",
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'template' => array(
+        'description' => "The template name.",
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'location' => array(
+        'description' => "The location of the files (theme or module)",
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array(
+      'nid',
+      'template'
+    ),
+  );
+
+  return $schema;
+
+}

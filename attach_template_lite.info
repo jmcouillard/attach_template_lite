@@ -1,0 +1,7 @@
+name = Attach template lite
+description = Attach a custom template to a node using a dropdown on the node form. No settings.
+package = jmcouillard
+core = 7.x
+version = "7.x-0.1"
+
+configure = admin/config/content/attach_template
