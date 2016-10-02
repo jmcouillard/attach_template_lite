@@ -81,9 +81,7 @@ function attach_template_lite_node_submit($node, $form, &$form_state) {
 
   if (isset($form_state['values'])) {
 
-    global $language;
     $values = $form_state['values'];
-    $lang = _attach_template_lite_get_language($node);
 
     // If a template was selected
     if (isset($values['attached_template'])) {
