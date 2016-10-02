@@ -19,4 +19,4 @@ The file named *mytemplate.inc* must include a funcion named `mytemplate()`.
 
 ### Examples
 
-Examples can be found in `attached_template_lite/templates` folder. Use thos as a starting point for your own templates.
+Examples can be found in `attached_template_lite/templates` folder. Use those as a starting point for your own templates.
