@@ -41,8 +41,16 @@ function attach_template_lite_node_view($node, $view_mode, $langcode) {
  */
 function attach_template_lite_field_extra_fields() {
 
+  // Define types variables
+  $allowed_types = variable_get('attach_template_lite_type', array());
+
   foreach (entity_get_info() as $entity_type => $entity_info) {
     foreach (array_keys($entity_info['bundles']) as $bundle) {
+
+      // Do not show if not specified in config page
+      if (isset($allowed_types[$bundle]) && $allowed_types[$bundle] === 0) {
+        continue;
+      };
 
       // This is a compatibilty fix for Display Suite and Metatag compatibilty
       // https://drupal.org/node/1284852
